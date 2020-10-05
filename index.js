@@ -13,15 +13,16 @@ app.use(cors())
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.449nt.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
-app.get('/', (req, res) => {
-  res.send('Welcome from volunteer network server!')
-})
-
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const eventCollection = client.db(`${process.env.DB_NAME}`).collection(`${process.env.DB_COLLECTION}`)
   const volRegisterCollection = client.db(`${process.env.DB_NAME}`).collection(`${process.env.DB_COLLECTION_2}`)
-  
+
+  // root directory for server
+  app.get('/', (req, res) => {
+    res.send('Welcome from volunteer network server!')
+  })
+
   //insert event
   app.post('/addEvent', (req, res) => {
     const event = req.body;
@@ -51,33 +52,33 @@ client.connect(err => {
   // all registered event 
   app.get('/allRegEvents', (req, res) => {
     volRegisterCollection.find({})
-    .toArray((err, documents) => {
-      res.send(documents);
-    })
+      .toArray((err, documents) => {
+        res.send(documents);
+      })
   })
 
   // show specific user registered volunteer task
   app.get('/volTasks', (req, res) => {
-    volRegisterCollection.find({email: req.query.email})
-    .toArray((err, documents) => {
-      res.send(documents);
-    })
+    volRegisterCollection.find({ email: req.query.email })
+      .toArray((err, documents) => {
+        res.send(documents);
+      })
   })
 
   // event delete 
   app.delete('/delete/:id', (req, res) => {
-    volRegisterCollection.deleteOne({_id: ObjectId(req.params.id)})
-    .then(result => {
-      res.send(result.deletedCount > 0);
-    })
+    volRegisterCollection.deleteOne({ _id: ObjectId(req.params.id) })
+      .then(result => {
+        res.send(result.deletedCount > 0);
+      })
   })
 
   // registered event delete (admin) 
   app.delete('/deleteRegisteredTask/:id', (req, res) => {
-    volRegisterCollection.deleteOne({_id: ObjectId(req.params.id)})
-    .then(result => {
-      res.send(result.deletedCount > 0);
-    })
+    volRegisterCollection.deleteOne({ _id: ObjectId(req.params.id) })
+      .then(result => {
+        res.send(result.deletedCount > 0);
+      })
   })
 
   console.log("database connection established");
