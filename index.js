@@ -27,7 +27,7 @@ client.connect(err => {
     const event = req.body;
     eventCollection.insertOne(event)
       .then(result => {
-        res.send(result.insertedCount)
+        res.send(result.insertedCount > 0)
       })
   })
 
