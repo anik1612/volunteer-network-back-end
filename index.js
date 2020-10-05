@@ -80,8 +80,7 @@ client.connect(err => {
         res.send(result.deletedCount > 0);
       })
   })
-
-  console.log("database connection established");
+  
 });
 
 app.listen(process.env.PORT || port)
