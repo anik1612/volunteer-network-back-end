@@ -1,5 +1,4 @@
 # Volunteer Network
--
 
 A single page social task app where user can select available volunteer task and register for free & admin can make a new volunteer task.
 
